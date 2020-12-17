@@ -1,26 +1,36 @@
 <h4>Formularios <small> reactivo </small></h4>
 <hr>
-<form autocomplete="off">
+<form autocomplete="off" [formGroup]="formulario" (ngSubmit)="guardar()" >
 
   <div>
 
     <div class="form-group row">
       <label class="col-2 col-form-label">Nombre</label>
-      <div class="col-8">
+      <div class="col">
 
         <input class="form-control"
                type="text"
+               formControlName="nombre"
+               [class.is-invalid]="nombreNoValido"
                placeholder="Nombre">
+        <small *ngIf="nombreNoValido" class="form-text text-danger"> 
+          Ingrese 5 Letras
+        </small>
       </div>
     </div>
 
     <div class="form-group row">
       <label class="col-2 col-form-label">Apellido</label>
-      <div class="col-8">
+      <div class="col">
 
         <input class="form-control"
                type="text"
+               formControlName="apellido"
+               [class.is-invalid]="apellidoNoValido"
                placeholder="Apellido">
+        <small *ngIf="apellidoNoValido" class="form-text text-danger"> 
+        Ingrese 5 Letras
+      </small>
       </div>
     </div>
 
@@ -28,23 +38,146 @@
 
   <div class="form-group row">
     <label class="col-2 col-form-label">Correo</label>
-    <div class="col-8">
+    <div class="col">
 
       <input class="form-control"
              type="email"
+             formControlName="correo"
+             [class.is-invalid]="correoNoValido"
              placeholder="Correo electrónico">
+      <small *ngIf="correoNoValido" class="form-text text-danger"> 
+      Ingrese un correo válido
+    </small>
     </div>
   </div>
 
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Usuario</label>
+    <div class="col">
 
+      <input class="form-control"
+             type="text"
+             formControlName="usuario"
+             [class.is-invalid]="usuarioNoValido"
+             placeholder="Ingrese nombre de usuario">
+      <small *ngIf="usuarioNoValido" class="form-text text-danger"> 
+        El nombre de usuario no se encuentra disponible.
+    </small>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Password</label>
+    <div class="col">
+
+      <input class="form-control"
+             type="text"
+             formControlName="pass1"
+             [class.is-invalid]="pass1NoValido"
+             placeholder="Contraseña">
+      <small *ngIf="pass1NoValido" class="form-text text-danger">
+        La contraseña es un campo requerido
+      </small>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-2 col-form-label">Confirme Password</label>
+    <div class="col">
+
+      <input class="form-control"
+             type="text"
+             formControlName="pass2"
+             [class.is-invalid]="pass2NoValido"
+             placeholder="Confirme Contraseña">
+      <small *ngIf="pass2NoValido" class="form-text text-danger">
+        Las contraseñas suministradas no coinciden
+      </small>
+    </div>
+  </div>
+
+  <div class="form-group row" formGroupName="direccion" >
+    <label class="col-2 col-form-label">Dirección</label>
+    <div class="form-row col">
+      <div class="col ">
+          <input type="text" 
+                  name="distrito"
+                  formControlName="distrito"
+                  [class.is-invalid]="distritoNoValido"
+                  placeholder="Distrito" 
+                  class="form-control" >
+                  <small *ngIf="ciudadNoValido" class="form-text text-danger"> 
+                    El distrito es un campo obligatorio
+                  </small>
+      </div>
+      <div class="col ">
+          <input type="text" 
+                  name="ciudad"
+                  formControlName="ciudad"
+                  [class.is-invalid]="ciudadNoValido"
+                  placeholder="Ciudad" 
+                  class="form-control" >
+                  <small *ngIf="distritoNoValido" class="form-text text-danger"> 
+                    La ciudad es un campo obligatorio
+                  </small>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+  
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th>ID</th>
+            <th>Pasatiempos</th>
+            <th>Borrar</th>
+          </tr>
+        </thead>
+        <tbody formArrayName="pasatiempos">
+          <tr *ngFor="let item of pasatiempos.controls; let i=index">
+            <td>{{i+1}}</td>
+            <td>
+              <input type="text"
+                      [formControlName]="i" 
+                      class="form-control" >
+            </td>
+            <td>
+              <button (click)="borrarPasatiempo(i)"
+                      class="btn btn-danger">
+                Borrar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="btn btn-primary btn-block mb-3 mt-3" 
+              (click)="agregarPasatiempo()"
+              type="button">
+        +Agregar
+      </button>
+    </div>
+  </div>
 
   <div class="form-group row">
     <label class="col-2 col-form-label">&nbsp;</label>
-    <div class="input-group col-md-8">
+    <div class="input-group col">
       <button type="submit" class="btn btn-outline-primary btn-block">
         Guardar
       </button>
     </div>
   </div>
+  <hr>
+
+  <pre>
+    Estado del formulario: {{ formulario.valid}}
+    <br>
+    Estatus: {{formulario.status}}
+  </pre>
+
+<pre>
+  {{ formulario.value | json}}
+</pre>
+
 
 </form>
